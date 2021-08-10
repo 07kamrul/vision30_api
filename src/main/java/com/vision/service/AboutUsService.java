@@ -3,6 +3,7 @@ package com.vision.service;
 import static com.vision.util.GlobalConstants.APP_CODE;
 import static com.vision.util.GlobalConstants.SEARCH_TEXT;
 import static com.vision.util.GlobalConstants.USERNAME;
+import static com.vision.util.GlobalConstants.IDS;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,11 +28,6 @@ public class AboutUsService implements IAboutUsService {
 	@Autowired
 	private IAboutUsDao aboutUsDao;
 
-	/*
-	 * { "apiKey" : "ZWR1Y2l0aW9uQkRBMTIzNDU2Nzg5", "appCode" : "SHOUT", "agencyIds"
-	 * : "["47ae9247-dbc6-4cdd-be06-7eb923999b88"]", "username" : "ruhul1234" }
-	 */
-
 	@Override
 	public Map<String, Object> getAboutUs(MasterViewModel viewModel) {
 
@@ -42,7 +38,12 @@ public class AboutUsService implements IAboutUsService {
 		try {
 
 			List<AboutUsModel> list = aboutUsDao.findAll();
-			serviceUtil.addResponseDataForSuccess(list, "Fetch Successful");
+
+			if (list != null && list.size() > 0) {
+				serviceUtil.addResponseDataForSuccess(list, "Fetch Successful");
+			} else {
+				serviceUtil.addResponseDataForSuccess("No such found");
+			}
 
 		} catch (Exception e) {
 			serviceUtil.addResponseDataForException(e);
@@ -51,16 +52,10 @@ public class AboutUsService implements IAboutUsService {
 		return serviceUtil.getServiceReturn();
 	}
 
-	/*
-	 * { "apiKey" : "ZWR1Y2l0aW9uQkRBMTIzNDU2Nzg5", "appCode" : "SHOUT", "agencyIds"
-	 * : "["47ae9247-dbc6-4cdd-be06-7eb923999b88"]", "username" : "ruhul1234", "ids"
-	 * : "["47ae9247-dbc6-4cdd-be06-7eb923999b88"]" }
-	 */
-
 	@Override
 	public Map<String, Object> getAboutUsByIds(MasterViewModel viewModel) {
 
-		if (serviceUtil.isFailedPrecoditions(viewModel, APP_CODE, USERNAME)) {
+		if (serviceUtil.isFailedPrecoditions(viewModel, APP_CODE, USERNAME, IDS)) {
 			return serviceUtil.getServiceReturnForPreconditionFailed();
 		}
 
@@ -68,8 +63,13 @@ public class AboutUsService implements IAboutUsService {
 
 			List<UUID> ids = Arrays.asList(viewModel.getIds()).stream().map(UUID::fromString)
 					.collect(Collectors.toList());
+
 			List<AboutUsModel> list = aboutUsDao.findByIdIn(ids);
-			serviceUtil.addResponseDataForSuccess(list, "Fetch Successful");
+			if (list != null && list.size() > 0) {
+				serviceUtil.addResponseDataForSuccess(list, "Fetch Successful");
+			} else {
+				serviceUtil.addResponseDataForSuccess("No such found");
+			}
 
 		} catch (Exception e) {
 			serviceUtil.addResponseDataForException(e);
@@ -77,11 +77,6 @@ public class AboutUsService implements IAboutUsService {
 
 		return serviceUtil.getServiceReturn();
 	}
-
-	/*
-	 * { "apiKey" : "ZWR1Y2l0aW9uQkRBMTIzNDU2Nzg5", "appCode" : "SHOUT", "agencyIds"
-	 * : "["47ae9247-dbc6-4cdd-be06-7eb923999b88"]", "username" : "ruhul1234" }
-	 */
 
 	@Override
 	public Map<String, Object> addAboutUs(AboutUsModel model, MasterViewModel viewModel) {
@@ -102,11 +97,6 @@ public class AboutUsService implements IAboutUsService {
 		return serviceUtil.getServiceReturn();
 	}
 
-	/*
-	 * { "apiKey" : "ZWR1Y2l0aW9uQkRBMTIzNDU2Nzg5", "appCode" : "SHOUT", "agencyIds"
-	 * : "["47ae9247-dbc6-4cdd-be06-7eb923999b88"]", "username" : "ruhul1234" }
-	 */
-
 	@Override
 	public Map<String, Object> addAllAboutUs(List<AboutUsModel> models, MasterViewModel viewModel) {
 
@@ -126,12 +116,6 @@ public class AboutUsService implements IAboutUsService {
 		return serviceUtil.getServiceReturn();
 	}
 
-	/*
-	 * { "apiKey" : "ZWR1Y2l0aW9uQkRBMTIzNDU2Nzg5", "appCode" : "SHOUT", "agencyIds"
-	 * : "["47ae9247-dbc6-4cdd-be06-7eb923999b88"]", "username" : "ruhul1234",
-	 * "searchText" : "data" }
-	 */
-
 	@Override
 	public Map<String, Object> searchAboutUs(MasterViewModel viewModel) {
 
@@ -140,11 +124,19 @@ public class AboutUsService implements IAboutUsService {
 		}
 
 		try {
-			Object[] idsObj = aboutUsDao.getAboutUsIdsBySearchText(viewModel.getSearchText());
-			List<UUID> ids = Arrays.asList(idsObj).stream().map(idObj -> UUID.fromString((String) idObj))
-					.collect(Collectors.toList());
-			List<AboutUsModel> list = aboutUsDao.findByIdIn(ids);
-			serviceUtil.addResponseDataForSuccess(list, "Deleted Successfully");
+			Object[] idsObj = aboutUsDao.getAboutUsIdsBySearchText(viewModel.getSearchText().toLowerCase().trim());
+
+			if (idsObj != null && idsObj.length > 0) {
+				List<UUID> ids = Arrays.asList(idsObj).stream().map(idObj -> UUID.fromString((String) idObj))
+						.collect(Collectors.toList());
+
+				List<AboutUsModel> list = aboutUsDao.findByIdIn(ids);
+
+				serviceUtil.addResponseDataForSuccess(list, "Found Successfully");
+			} else {
+				serviceUtil.addResponseDataForSuccess("No such found");
+
+			}
 
 		} catch (Exception e) {
 			serviceUtil.addResponseDataForException(e);
@@ -153,16 +145,10 @@ public class AboutUsService implements IAboutUsService {
 		return serviceUtil.getServiceReturn();
 	}
 
-	/*
-	 * { "apiKey" : "ZWR1Y2l0aW9uQkRBMTIzNDU2Nzg5", "appCode" : "SHOUT", "agencyIds"
-	 * : "["47ae9247-dbc6-4cdd-be06-7eb923999b88"]", "username" : "ruhul1234", "ids"
-	 * : "["47ae9247-dbc6-4cdd-be06-7eb923999b88"]" }
-	 */
-
 	@Override
 	public Map<String, Object> deleteAboutUsByIds(MasterViewModel viewModel) {
 
-		if (serviceUtil.isFailedPrecoditions(viewModel, APP_CODE, USERNAME)) {
+		if (serviceUtil.isFailedPrecoditions(viewModel, APP_CODE, USERNAME, IDS)) {
 			return serviceUtil.getServiceReturnForPreconditionFailed();
 		}
 
@@ -170,8 +156,15 @@ public class AboutUsService implements IAboutUsService {
 
 			List<UUID> ids = Arrays.asList(viewModel.getIds()).stream().map(UUID::fromString)
 					.collect(Collectors.toList());
+
 			int count = aboutUsDao.deleteByIdIn(ids);
-			serviceUtil.addResponseDataForSuccess(count, "Deleted Successfully");
+
+			if (count > 0) {
+				serviceUtil.addResponseDataForSuccess(count, "Deleted Successfully");
+			} else {
+				serviceUtil.addResponseDataForSuccess("No data deleted.");
+
+			}
 
 		} catch (Exception e) {
 			serviceUtil.addResponseDataForException(e);

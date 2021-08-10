@@ -1,4 +1,5 @@
 package com.vision.repository;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -13,15 +14,14 @@ import com.vision.model.AboutUsModel;
 
 @Repository
 @Transactional
-public interface IAboutUsDao extends JpaRepository<AboutUsModel,UUID> {
+public interface IAboutUsDao extends JpaRepository<AboutUsModel, UUID> {
 
 	int deleteByIdIn(List<UUID> ids);
 
 	List<AboutUsModel> findByIdIn(List<UUID> ids);
 
-	@Query(value = "SELECT CAST (id as character varying) " 
-		+ " FROM about_us WHERE "
-		, nativeQuery = true)
+	@Query(value = "SELECT CAST (id as character varying) "
+			+ " FROM about_us WHERE LOWER(descriptions) LIKE %:searchText% ", nativeQuery = true)
 	Object[] getAboutUsIdsBySearchText(@Param("searchText") String searchText);
 
 }

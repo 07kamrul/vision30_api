@@ -303,6 +303,15 @@ public class ServiceUtil {
 	public void generateValidators() {
 
 		System.out.println("***************Generateing Validators For Service Util********************");
+		map.put(GlobalConstants.IDS, (viewModel) -> addPreconditionMsgIfNeededForId(viewModel.getIds(), "Invalid IDs"));
+
+		map.put(GlobalConstants.ADDITIONAL_USERNAME,
+				(viewModel) -> addPreconditionMsgIfNeededForId(viewModel.getAdditionalUsername(),
+						"Invalid Additional Username"));
+
+		map.put(GlobalConstants.PERSON_NAME,
+				(viewModel) -> addPreconditionMsgIfNeededForId(viewModel.getPersonName(), "Invalid Person name"));
+
 		map.put(GlobalConstants.APP_CODE,
 				(viewModel) -> addPreconditionMsgIfNeeded(viewModel.getAppCode(), "Invalid App Code"));
 

@@ -27,6 +27,10 @@ public class GlobalConstants {
 	public static final String TOKEN = "TOKEN";
 	public static final String USERNAME = "USERNAME";
 	public static final String SEARCH_TEXT = "SEARCH_TEXT";
+	public static final String ADDITIONAL_USERNAME = "ADDITIONAL_USERNAME";
+	public static final String IDS = "IDS";
+
+	public static final String PERSON_NAME = "PERSON_NAME";
 
 	public static final String DATE = "DATE";
 	public static final String FROM_DATE = "FROM_DATE";

@@ -3,6 +3,10 @@ package com.vision.service;
 import static com.vision.util.GlobalConstants.APP_CODE;
 import static com.vision.util.GlobalConstants.SEARCH_TEXT;
 import static com.vision.util.GlobalConstants.USERNAME;
+import static com.vision.util.GlobalConstants.PERSON_NAME;
+import static com.vision.util.GlobalConstants.IDS;
+import static com.vision.util.GlobalConstants.FROM_DATE;
+import static com.vision.util.GlobalConstants.TO_DATE;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,11 +31,6 @@ public class AmountService implements IAmountService {
 	@Autowired
 	private IAmountDao amountDao;
 
-	/*
-	 * { "apiKey" : "ZWR1Y2l0aW9uQkRBMTIzNDU2Nzg5", "appCode" : "SHOUT", "agencyIds"
-	 * : "["47ae9247-dbc6-4cdd-be06-7eb923999b88"]", "username" : "ruhul1234" }
-	 */
-
 	@Override
 	public Map<String, Object> getAmount(MasterViewModel viewModel) {
 
@@ -42,7 +41,12 @@ public class AmountService implements IAmountService {
 		try {
 
 			List<AmountModel> list = amountDao.findAll();
-			serviceUtil.addResponseDataForSuccess(list, "Fetch Successful");
+
+			if (list != null && list.size() > 0) {
+				serviceUtil.addResponseDataForSuccess(list, "Fetch Successful.");
+			} else {
+				serviceUtil.addResponseDataForSuccess("No such found.");
+			}
 
 		} catch (Exception e) {
 			serviceUtil.addResponseDataForException(e);
@@ -51,16 +55,10 @@ public class AmountService implements IAmountService {
 		return serviceUtil.getServiceReturn();
 	}
 
-	/*
-	 * { "apiKey" : "ZWR1Y2l0aW9uQkRBMTIzNDU2Nzg5", "appCode" : "SHOUT", "agencyIds"
-	 * : "["47ae9247-dbc6-4cdd-be06-7eb923999b88"]", "username" : "ruhul1234", "ids"
-	 * : "["47ae9247-dbc6-4cdd-be06-7eb923999b88"]" }
-	 */
-
 	@Override
 	public Map<String, Object> getAmountByIds(MasterViewModel viewModel) {
 
-		if (serviceUtil.isFailedPrecoditions(viewModel, APP_CODE, USERNAME)) {
+		if (serviceUtil.isFailedPrecoditions(viewModel, APP_CODE, USERNAME, IDS)) {
 			return serviceUtil.getServiceReturnForPreconditionFailed();
 		}
 
@@ -68,8 +66,14 @@ public class AmountService implements IAmountService {
 
 			List<UUID> ids = Arrays.asList(viewModel.getIds()).stream().map(UUID::fromString)
 					.collect(Collectors.toList());
+
 			List<AmountModel> list = amountDao.findByIdIn(ids);
-			serviceUtil.addResponseDataForSuccess(list, "Fetch Successful");
+
+			if (list != null && list.size() > 0) {
+				serviceUtil.addResponseDataForSuccess(list, "Fetch Successful.");
+			} else {
+				serviceUtil.addResponseDataForSuccess("No such found.");
+			}
 
 		} catch (Exception e) {
 			serviceUtil.addResponseDataForException(e);
@@ -77,11 +81,6 @@ public class AmountService implements IAmountService {
 
 		return serviceUtil.getServiceReturn();
 	}
-
-	/*
-	 * { "apiKey" : "ZWR1Y2l0aW9uQkRBMTIzNDU2Nzg5", "appCode" : "SHOUT", "agencyIds"
-	 * : "["47ae9247-dbc6-4cdd-be06-7eb923999b88"]", "username" : "ruhul1234" }
-	 */
 
 	@Override
 	public Map<String, Object> addAmount(AmountModel model, MasterViewModel viewModel) {
@@ -102,11 +101,6 @@ public class AmountService implements IAmountService {
 		return serviceUtil.getServiceReturn();
 	}
 
-	/*
-	 * { "apiKey" : "ZWR1Y2l0aW9uQkRBMTIzNDU2Nzg5", "appCode" : "SHOUT", "agencyIds"
-	 * : "["47ae9247-dbc6-4cdd-be06-7eb923999b88"]", "username" : "ruhul1234" }
-	 */
-
 	@Override
 	public Map<String, Object> addAllAmount(List<AmountModel> models, MasterViewModel viewModel) {
 
@@ -126,12 +120,6 @@ public class AmountService implements IAmountService {
 		return serviceUtil.getServiceReturn();
 	}
 
-	/*
-	 * { "apiKey" : "ZWR1Y2l0aW9uQkRBMTIzNDU2Nzg5", "appCode" : "SHOUT", "agencyIds"
-	 * : "["47ae9247-dbc6-4cdd-be06-7eb923999b88"]", "username" : "ruhul1234",
-	 * "searchText" : "data" }
-	 */
-
 	@Override
 	public Map<String, Object> searchAmount(MasterViewModel viewModel) {
 
@@ -140,11 +128,19 @@ public class AmountService implements IAmountService {
 		}
 
 		try {
-			Object[] idsObj = amountDao.getAmountIdsBySearchText(viewModel.getSearchText());
-			List<UUID> ids = Arrays.asList(idsObj).stream().map(idObj -> UUID.fromString((String) idObj))
-					.collect(Collectors.toList());
-			List<AmountModel> list = amountDao.findByIdIn(ids);
-			serviceUtil.addResponseDataForSuccess(list, "Deleted Successfully");
+			Object[] idsObj = amountDao.getAmountIdsBySearchText(viewModel.getSearchText().toLowerCase().trim());
+
+			if (idsObj != null && idsObj.length > 0) {
+
+				List<UUID> ids = Arrays.asList(idsObj).stream().map(idObj -> UUID.fromString((String) idObj))
+						.collect(Collectors.toList());
+
+				List<AmountModel> list = amountDao.findByIdIn(ids);
+
+				serviceUtil.addResponseDataForSuccess(list, "Deleted Successfully");
+			} else {
+				serviceUtil.addResponseDataForSuccess("No such found.");
+			}
 
 		} catch (Exception e) {
 			serviceUtil.addResponseDataForException(e);
@@ -153,16 +149,10 @@ public class AmountService implements IAmountService {
 		return serviceUtil.getServiceReturn();
 	}
 
-	/*
-	 * { "apiKey" : "ZWR1Y2l0aW9uQkRBMTIzNDU2Nzg5", "appCode" : "SHOUT", "agencyIds"
-	 * : "["47ae9247-dbc6-4cdd-be06-7eb923999b88"]", "username" : "ruhul1234", "ids"
-	 * : "["47ae9247-dbc6-4cdd-be06-7eb923999b88"]" }
-	 */
-
 	@Override
 	public Map<String, Object> deleteAmountByIds(MasterViewModel viewModel) {
 
-		if (serviceUtil.isFailedPrecoditions(viewModel, APP_CODE, USERNAME)) {
+		if (serviceUtil.isFailedPrecoditions(viewModel, APP_CODE, USERNAME, IDS)) {
 			return serviceUtil.getServiceReturnForPreconditionFailed();
 		}
 
@@ -170,8 +160,130 @@ public class AmountService implements IAmountService {
 
 			List<UUID> ids = Arrays.asList(viewModel.getIds()).stream().map(UUID::fromString)
 					.collect(Collectors.toList());
+
 			int count = amountDao.deleteByIdIn(ids);
-			serviceUtil.addResponseDataForSuccess(count, "Deleted Successfully");
+
+			if (count > 0) {
+				serviceUtil.addResponseDataForSuccess(count, "Deleted Successfully");
+			} else {
+				serviceUtil.addResponseDataForSuccess("No data deleted.");
+			}
+
+		} catch (Exception e) {
+			serviceUtil.addResponseDataForException(e);
+		}
+
+		return serviceUtil.getServiceReturn();
+	}
+
+	@Override
+	public Map<String, Object> searchAmountByName(MasterViewModel viewModel) {
+
+		if (serviceUtil.isFailedPrecoditions(viewModel, APP_CODE, USERNAME, SEARCH_TEXT)) {
+			return serviceUtil.getServiceReturnForPreconditionFailed();
+		}
+
+		try {
+			Object[] idsObj = amountDao.getAmountIdsByName(viewModel.getSearchText().toLowerCase().trim());
+
+			if (idsObj != null && idsObj.length > 0) {
+
+				List<UUID> ids = Arrays.asList(idsObj).stream().map(idObj -> UUID.fromString((String) idObj))
+						.collect(Collectors.toList());
+
+				List<AmountModel> list = amountDao.findByIdIn(ids);
+
+				serviceUtil.addResponseDataForSuccess(list, "Deleted Successfully");
+			} else {
+				serviceUtil.addResponseDataForSuccess("No such found.");
+			}
+
+		} catch (Exception e) {
+			serviceUtil.addResponseDataForException(e);
+		}
+
+		return serviceUtil.getServiceReturn();
+	}
+
+	@Override
+	public Map<String, Object> searchAmountByStatus(MasterViewModel viewModel) {
+
+		if (serviceUtil.isFailedPrecoditions(viewModel, APP_CODE, USERNAME, SEARCH_TEXT)) {
+			return serviceUtil.getServiceReturnForPreconditionFailed();
+		}
+
+		try {
+			Object[] idsObj = amountDao.getAmountIdsByStatus(viewModel.getSearchText().toLowerCase().trim());
+
+			if (idsObj != null && idsObj.length > 0) {
+
+				List<UUID> ids = Arrays.asList(idsObj).stream().map(idObj -> UUID.fromString((String) idObj))
+						.collect(Collectors.toList());
+
+				List<AmountModel> list = amountDao.findByIdIn(ids);
+
+				serviceUtil.addResponseDataForSuccess(list, "Deleted Successfully");
+			} else {
+				serviceUtil.addResponseDataForSuccess("No such found.");
+			}
+
+		} catch (Exception e) {
+			serviceUtil.addResponseDataForException(e);
+		}
+
+		return serviceUtil.getServiceReturn();
+	}
+
+	@Override
+	public Map<String, Object> searchAmountByDate(MasterViewModel viewModel) {
+
+		if (serviceUtil.isFailedPrecoditions(viewModel, APP_CODE, USERNAME, FROM_DATE, TO_DATE)) {
+			return serviceUtil.getServiceReturnForPreconditionFailed();
+		}
+
+		try {
+			Object[] idsObj = amountDao.getAmountIdsByDate(viewModel.getFromDate(), viewModel.getToDate());
+
+			if (idsObj != null && idsObj.length > 0) {
+
+				List<UUID> ids = Arrays.asList(idsObj).stream().map(idObj -> UUID.fromString((String) idObj))
+						.collect(Collectors.toList());
+
+				List<AmountModel> list = amountDao.findByIdIn(ids);
+
+				serviceUtil.addResponseDataForSuccess(list, "Deleted Successfully");
+			} else {
+				serviceUtil.addResponseDataForSuccess("No such found.");
+			}
+
+		} catch (Exception e) {
+			serviceUtil.addResponseDataForException(e);
+		}
+
+		return serviceUtil.getServiceReturn();
+	}
+
+	@Override
+	public Map<String, Object> searchAmountByDatePersonName(MasterViewModel viewModel) {
+		if (serviceUtil.isFailedPrecoditions(viewModel, APP_CODE, USERNAME, FROM_DATE, TO_DATE, PERSON_NAME)) {
+			return serviceUtil.getServiceReturnForPreconditionFailed();
+		}
+
+		try {
+			Object[] idsObj = amountDao.searchAmountByDatePersonName(viewModel.getFromDate(), viewModel.getToDate(),
+					viewModel.getPersonName().toLowerCase().trim());
+
+			if (idsObj != null && idsObj.length > 0) {
+
+				List<UUID> ids = Arrays.asList(idsObj).stream().map(idObj -> UUID.fromString((String) idObj))
+						.collect(Collectors.toList());
+
+				List<AmountModel> list = amountDao.findByIdIn(ids);
+
+				serviceUtil.addResponseDataForSuccess(list, "Deleted Successfully");
+			} else {
+				serviceUtil.addResponseDataForSuccess("No such found.");
+			}
 
 		} catch (Exception e) {
 			serviceUtil.addResponseDataForException(e);

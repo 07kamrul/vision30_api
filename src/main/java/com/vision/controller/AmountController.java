@@ -107,6 +107,62 @@ public class AmountController {
 		return controllerUtil.getResponseEntity();
 	}
 
+	@PostMapping("/search_amount_by_name")
+	public ResponseEntity<Map<String, Object>> searchAmountByName(HttpServletRequest request,
+			@RequestHeader("latLng") String latLng, @RequestBody MasterViewModel viewModel) {
+
+		if (latLng != null) {
+			Map<String, Object> data = amountService.searchAmountByName(viewModel);
+			controllerUtil.buildResponseEntity(data);
+		} else {
+			controllerUtil.buildFailedResponseEntity();
+		}
+
+		return controllerUtil.getResponseEntity();
+	}
+
+	@PostMapping("/search_amount_by_status")
+	public ResponseEntity<Map<String, Object>> searchAmountByStatus(HttpServletRequest request,
+			@RequestHeader("latLng") String latLng, @RequestBody MasterViewModel viewModel) {
+
+		if (latLng != null) {
+			Map<String, Object> data = amountService.searchAmountByStatus(viewModel);
+			controllerUtil.buildResponseEntity(data);
+		} else {
+			controllerUtil.buildFailedResponseEntity();
+		}
+
+		return controllerUtil.getResponseEntity();
+	}
+
+	@PostMapping("/search_amount_by_date")
+	public ResponseEntity<Map<String, Object>> searchAmountByDate(HttpServletRequest request,
+			@RequestHeader("latLng") String latLng, @RequestBody MasterViewModel viewModel) {
+
+		if (latLng != null) {
+			Map<String, Object> data = amountService.searchAmountByDate(viewModel);
+			controllerUtil.buildResponseEntity(data);
+		} else {
+			controllerUtil.buildFailedResponseEntity();
+		}
+
+		return controllerUtil.getResponseEntity();
+	}
+
+	@PostMapping("/search_amount_by_date_person_name")
+	public ResponseEntity<Map<String, Object>> searchAmountByDatePersonName(HttpServletRequest request,
+			@RequestHeader("latLng") String latLng, @RequestBody MasterViewModel viewModel) {
+
+		if (latLng != null) {
+			Map<String, Object> data = amountService.searchAmountByDatePersonName(viewModel);
+			controllerUtil.buildResponseEntity(data);
+		} else {
+			controllerUtil.buildFailedResponseEntity();
+		}
+
+		return controllerUtil.getResponseEntity();
+	}
+
 	@PostMapping("/delete_amount_by_ids")
 	public ResponseEntity<Map<String, Object>> deleteAmountByIds(HttpServletRequest request,
 			@RequestHeader("latLng") String latLng, @RequestBody MasterViewModel viewModel) {
