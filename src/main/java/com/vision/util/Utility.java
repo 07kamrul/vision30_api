@@ -73,4 +73,10 @@ public class Utility {
 
 	}
 
+	public static String removeSpaceAndMakeUsernameLowerCaseTrim(String givebUsername) {
+		if (givebUsername != null)
+			return givebUsername.replaceAll("\\s", "").toLowerCase().trim();
+		else
+			return givebUsername;
+	}
 }

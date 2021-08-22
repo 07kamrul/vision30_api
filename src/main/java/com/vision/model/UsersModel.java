@@ -16,13 +16,13 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "users")
-public class UsersModel{
+public class UsersModel {
 
- 	@Id
+	@Id
 	@Type(type = "org.hibernate.type.PostgresUUIDType")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
-	private UUID id;	//NOT NULL DEFAULT uuid_generate_v4() 
+	private UUID id; // NOT NULL DEFAULT uuid_generate_v4()
 
 	@Column(name = "username")
 	private String username;
@@ -34,93 +34,90 @@ public class UsersModel{
 	private String email;
 
 	@Column(name = "is_user")
-	private boolean isUser;	//NOT NULL 
+	private boolean isUser; // NOT NULL
 
 	@Column(name = "is_admin")
-	private boolean isAdmin;	//NOT NULL 
+	private boolean isAdmin; // NOT NULL
 
 	@Column(name = "date_joined")
-	private Date dateJoined;	//NOT NULL 
+	private Date dateJoined; // NOT NULL
 
 	@Column(name = "member_id")
-	private int memberId;	//NOT NULL 
+	private int memberId; // NOT NULL
 
 	@Transient
 	private MasterViewModel masterViewModel;
 
-
-	public UUID getId(){
+	public UUID getId() {
 		return this.id;
 	}
 
-	public void  setId(UUID id){
+	public void setId(UUID id) {
 		this.id = id;
 	}
 
-	public String getUsername(){
+	public String getUsername() {
 		return this.username;
 	}
 
-	public void  setUsername(String username){
+	public void setUsername(String username) {
 		this.username = username;
 	}
 
-	public String getUserPassword(){
+	public String getUserPassword() {
 		return this.userPassword;
 	}
 
-	public void  setUserPassword(String userPassword){
+	public void setUserPassword(String userPassword) {
 		this.userPassword = userPassword;
 	}
 
-	public String getEmail(){
+	public String getEmail() {
 		return this.email;
 	}
 
-	public void  setEmail(String email){
+	public void setEmail(String email) {
 		this.email = email;
 	}
 
-	public boolean isUser(){
+	public boolean isUser() {
 		return this.isUser;
 	}
 
-	public void  setUser(boolean isUser){
+	public void setUser(boolean isUser) {
 		this.isUser = isUser;
 	}
 
-	public boolean isAdmin(){
+	public boolean isAdmin() {
 		return this.isAdmin;
 	}
 
-	public void  setAdmin(boolean isAdmin){
+	public void setAdmin(boolean isAdmin) {
 		this.isAdmin = isAdmin;
 	}
 
-	public Date getDateJoined(){
+	public Date getDateJoined() {
 		return this.dateJoined;
 	}
 
-	public void  setDateJoined(Date dateJoined){
+	public void setDateJoined(Date dateJoined) {
 		this.dateJoined = dateJoined;
 	}
 
-	public int getMemberId(){
+	public int getMemberId() {
 		return this.memberId;
 	}
 
-	public void  setMemberId(int memberId){
+	public void setMemberId(int memberId) {
 		this.memberId = memberId;
 	}
 
-	public MasterViewModel getMasterViewModel(){
+	public MasterViewModel getMasterViewModel() {
 		return this.masterViewModel;
 	}
 
-	public void  setMasterViewModel(MasterViewModel masterViewModel){
+	public void setMasterViewModel(MasterViewModel masterViewModel) {
 		this.masterViewModel = masterViewModel;
 	}
-
-
 
 }
