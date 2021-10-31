@@ -33,6 +33,9 @@ public class UsersModel {
 	@Column(name = "email")
 	private String email;
 
+	@Column(name = "mobile")
+	private String mobile;
+
 	@Column(name = "is_user")
 	private boolean isUser; // NOT NULL
 
@@ -41,9 +44,6 @@ public class UsersModel {
 
 	@Column(name = "date_joined")
 	private Date dateJoined; // NOT NULL
-
-	@Column(name = "member_id")
-	private int memberId; // NOT NULL
 
 	@Transient
 	private MasterViewModel masterViewModel;
@@ -104,20 +104,20 @@ public class UsersModel {
 		this.dateJoined = dateJoined;
 	}
 
-	public int getMemberId() {
-		return this.memberId;
-	}
-
-	public void setMemberId(int memberId) {
-		this.memberId = memberId;
-	}
-
 	public MasterViewModel getMasterViewModel() {
 		return this.masterViewModel;
 	}
 
 	public void setMasterViewModel(MasterViewModel masterViewModel) {
 		this.masterViewModel = masterViewModel;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 
 }

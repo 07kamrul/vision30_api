@@ -49,12 +49,5 @@ public interface IUsersDao extends JpaRepository<UsersModel, UUID>, PagingAndSor
 			+ " LOWER(email) LIKE %:searchText% ORDER BY username, member_id ")
 	public List<UsersModel> getUserBySearchText(@Param("searchText") String searchText);
 
-	@Query("FROM UsersModel WHERE ( LOWER(personName) LIKE %:searchText% OR "
-			+ " LOWER(mobile) LIKE %:searchText% OR LOWER(username) LIKE %:searchText% OR "
-			+ " LOWER(email) LIKE %:searchText% )  ORDER BY username, personName ")
-	public List<UsersModel> getUserBySearchText(@Param("searchText") String searchText,
-			@Param("surveyRole") String surveyRole);
-
-	UsersModel findUserPasswordByUsername(String username);
 
 }

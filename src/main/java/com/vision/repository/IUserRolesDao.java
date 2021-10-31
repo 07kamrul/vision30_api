@@ -18,12 +18,14 @@ public interface IUserRolesDao extends JpaRepository<UserRolesModel, UUID> {
 
 	List<UserRolesModel> findByIdIn(List<UUID> ids);
 
-	@Query(value = "SELECT CAST (id as character varying) " + " FROM user_roles WHERE ", nativeQuery = true)
+	@Query(value = "SELECT CAST (id as character varying) "
+			+ " FROM user_roles WHERE username='searchText' ", nativeQuery = true)
 	Object[] getUserRolesIdsBySearchText(@Param("searchText") String searchText);
-
-	List<UserRolesModel> getRoleByUsernameOrEmail(String username);
 
 	@Query("FROM UsersModel WHERE username=:usernameOrEmail OR email=:usernameOrEmail ")
 	public List<UsersModel> getUserByUsernameOrEmail(@Param("usernameOrEmail") String usernameOrEmail);
+
+	@Query("FROM UserRolesModel WHERE username=:usernameOrEmail OR email=:usernameOrEmail ")
+	public List<UserRolesModel> getRoleByUsernameOrEmail(@Param("usernameOrEmail") String usernameOrEmail);
 
 }

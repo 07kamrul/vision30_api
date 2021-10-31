@@ -61,9 +61,6 @@ public class AuthenticationController {
 	@Autowired
 	private ServiceUtil serviceUtill;
 
-	@Value("${saltKeyFrontend}")
-	private String saltKeyFrontend;
-
 	@Autowired
 	private JwtUtil jwtUtil;
 
